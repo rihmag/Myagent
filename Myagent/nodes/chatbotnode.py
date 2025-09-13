@@ -5,7 +5,7 @@ class node:
     def call(self,state:State)-> dict:
         messages=state["messages"]
         response=self.llm.invoke(messages)
-        return {"messages":response.content}
+        return {"messages":response}
         
         
         

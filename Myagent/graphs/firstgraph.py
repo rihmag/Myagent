@@ -13,8 +13,8 @@ memory=MemorySaver()
 class FirstGraph:
     def __init__(self,llm):
         sendmail=SendMail().sendmail
-        course=Course().get_courses
-        self.tools=[sendmail,course]
+        get_courses=Course().get_courses
+        self.tools=[sendmail,get_courses]
         self.graph_builder=StateGraph(State)
         self.llm=llm.bind_tools(self.tools)
         

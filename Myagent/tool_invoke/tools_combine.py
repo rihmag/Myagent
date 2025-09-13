@@ -10,18 +10,18 @@ class Combine:
         It takes the last AI message (which should contain tool calls) and executes them.
         """
         print("--- Node: call_tool ---")
-        messages = state['messages']
-        last_message = messages[-1]
-    
+        last_message = state["messages"][-1]
+        print("this tool call in tools combine",last_message.additional_kwargs.get("tool_calls")[0].get("function").get("name"))
         tool_outputs = []
         # OpenAI model with tool_calls
-        if last_message.tool_calls:
-            for tool_call in last_message.tool_calls:
-                tool_name = tool_call.name
+        if last_message.additional_kwargs.get("tool_calls"):        
+                tool_name = last_message.additional_kwargs.get("tool_calls")[0].get("function").get("name")
+                tool_input = last_message.additional_kwargs.get("tool_calls")[0].get("function").get("arguments")
                 print(f"Executing tool: {tool_name} with input: {tool_input}")
                 # Find the tool by name and execute it
                 selected_tool = next(t for t in self.tools if t.name == tool_name)
-                output = selected_tool.invoke()
+                output = selected_tool.invoke(input=tool_input)
+                print(f"This final tool poutput in tools_combine: {output}")
                 tool_outputs.append(AIMessage(content=f"Tool output: {output}")) # Represent as AI message for simplicity
     
         # Basic parsing for Ollama if it tried to output JSON tool call
@@ -44,6 +44,6 @@ class Combine:
             # If no tool calls, just return the state as is, or an error message
             # For simplicity, we assume an error or a direct answer was intended by LLM
             pass
-    
+            
         return {"messages": tool_outputs}
     
