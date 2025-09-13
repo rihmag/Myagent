@@ -4,7 +4,7 @@ class SendMail:
     def __init__(self):
         pass
     @tool
-    def sendmail(self,state: State):
+    def sendmail()->dict:
         """_summary_
                 sends mail to the customer care of company
         Args:

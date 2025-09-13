@@ -2,20 +2,27 @@ from states.state import State
 class Condition():
     def __init__(self,llm):
         self.keywords=  ["support", "customer care", "help", "talk to agent", "contact support"]
-        self.keywords_for_course=["course"]
+        self.keywords_for_course=["course","courses"]
         self.llm=llm
-    def apply_condition(self, state: State) -> dict:
-        response = self.llm.invoke(state["messages"])
+    def apply_condition(self, state:State):
+        last_message = self.llm.invoke(state["messages"])
+        print(last_message)
+        for step in last_message:
+            if hasattr(step, "tool_calls"):
+                for tool_call in step.tool_calls:
+                    tool_name = tool_call.get("name")
+                    tool_args = tool_call.get("args")
+                    print(f"Tool called: {tool_name} with args: {tool_args}")
+                return "tool_call"
+
+        
         
         # Check if tool_calls exist in the response
-        if response.tool_calls:
-            # Check if any course-related keyword is in the messages
-            if any(kw in state["messages"] for kw in self.keywords_for_course):
-                return {"action": "course"}  # return as dict
-            # Check if any other general keyword is in the messages
-            elif any(kw in state["messages"] for kw in self.keywords):
-                return {"action": "sendmail"}  # return as dict
         
-        return {"action": "none"}  # default if no condition matches
+            
+        
+    
+        
+        return "end" # default if no condition matches
 
                 
