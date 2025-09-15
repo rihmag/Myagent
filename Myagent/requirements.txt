@@ -11,4 +11,3 @@ httpx
 flask
 twilio
 dotenv
-smtplib
