@@ -26,6 +26,7 @@ class Combine:
             # Parse JSON arguments
             try:
                 tool_input = json.loads(raw_arguments)
+
             except json.JSONDecodeError:
                 print("Error: Tool arguments are not valid JSON.")
                 tool_input = {}

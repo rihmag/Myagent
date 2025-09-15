@@ -10,7 +10,8 @@ class LoadUI:
         self.user_controls={}
         self.query=str
     def load_ui(self):
-        st.title("AI matlab maa ")
+        st.title("Yr it Assistant ")
+        st.subheader("an AI-powered chatbot to assist you with your course-related queries")
         
         documents_option=self.config.get_documents_options()
         use_case_options=self.config.usecase_options()
