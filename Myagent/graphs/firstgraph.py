@@ -14,13 +14,14 @@ class FirstGraph:
     def __init__(self,llm):
         sendmail=SendMail().sendmail
         get_courses=Course().get_courses
-        self.tools=[sendmail,get_courses]
+        get_user_query=SendMail().get_user_query
+        self.tools=[sendmail,get_courses,get_user_query]
         self.graph_builder=StateGraph(State)
         self.llm=llm.bind_tools(self.tools)
         
     def graph(self,input):
         condition=Condition(self.llm).apply_condition
-        self.graph_builder.add_node("chatbot", node(self.llm).call)
+        self.graph_builder.add_node("chatbot", node(self.llm).call)           
         self.graph_builder.add_node("call_tool",Combine(self.llm,self.tools).call_tool)
         self.graph_builder.add_node("apply_condition",condition)
         self.graph_builder.add_edge(START,"chatbot")

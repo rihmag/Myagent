@@ -1,5 +1,6 @@
 from langchain_core.messages import ToolMessage,AIMessage
 from states.state import State
+
 class Combine:
     def __init__(self,llm,tools):
         self.llm=llm
@@ -9,20 +10,40 @@ class Combine:
         Node to execute a tool if the LLM has decided to call one.
         It takes the last AI message (which should contain tool calls) and executes them.
         """
+        import json
         print("--- Node: call_tool ---")
         last_message = state["messages"][-1]
         print("this tool call in tools combine",last_message.additional_kwargs.get("tool_calls")[0].get("function").get("name"))
         tool_outputs = []
         # OpenAI model with tool_calls
-        if last_message.additional_kwargs.get("tool_calls"):        
-                tool_name = last_message.additional_kwargs.get("tool_calls")[0].get("function").get("name")
-                tool_input = last_message.additional_kwargs.get("tool_calls")[0].get("function").get("arguments")
-                print(f"Executing tool: {tool_name} with input: {tool_input}")
-                # Find the tool by name and execute it
-                selected_tool = next(t for t in self.tools if t.name == tool_name)
-                output = selected_tool.invoke(input=tool_input)
-                print(f"This final tool poutput in tools_combine: {output}")
-                tool_outputs.append(AIMessage(content=f"Tool output: {output}")) # Represent as AI message for simplicity
+        if last_message.additional_kwargs.get("tool_calls"):
+            tool_call = last_message.additional_kwargs["tool_calls"][0]
+            tool_name = tool_call["function"]["name"]
+            raw_arguments = tool_call["function"]["arguments"]
+            
+            print(f"Executing tool: {tool_name} with raw input: {raw_arguments}")
+            
+            # Parse JSON arguments
+            try:
+                tool_input = json.loads(raw_arguments)
+            except json.JSONDecodeError:
+                print("Error: Tool arguments are not valid JSON.")
+                tool_input = {}
+
+            # Find the tool by name
+            selected_tool = next((t for t in self.tools if t.name == tool_name), None)
+
+            if not selected_tool:
+                print(f"Tool {tool_name} not found.")
+            else:
+                # Call the tool with unpacked arguments
+                output = selected_tool.invoke(input={**tool_input})
+
+                print(f"Final tool output: {output}")
+
+                # Represent output as AI message
+                tool_outputs.append(AIMessage(content=f"Tool output: {output}"))
+ # Represent as AI message for simplicity
     
         # Basic parsing for Ollama if it tried to output JSON tool call
         elif isinstance(last_message.content, str) and "tool_name" in last_message.content:

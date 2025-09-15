@@ -8,3 +8,7 @@ faiss-cpu
 streamlit
 tavily_python
 httpx
+flask
+twilio
+dotenv
+smtplib
