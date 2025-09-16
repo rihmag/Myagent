@@ -18,7 +18,7 @@ else:
     first_graph=FirstGraph(llm=llm)
     str=str(chat_input)
     result=first_graph.graph(input=str)
-    print(result)
+    print("this is the result",result)
     for items in result:
         print("this is the items in the result",items)
         if items.get("chatbot"):
@@ -26,7 +26,7 @@ else:
         if items.get("call_tool"):
             st.write(items.get("call_tool")['messages'])
         if items.get("get_courses"):
-            st.write(items.get("get_courses")['messages'].content)
+            st.write(items.get("get_courses"))
         if items.get("sendmail"):
             st.write(items.get("sendmail")['messages'])
         if items.get("get_user_query"):

@@ -25,7 +25,11 @@ class Combine:
             
             # Parse JSON arguments
             try:
-                tool_input = json.loads(raw_arguments)
+                if not raw_arguments:
+                    tool_input = {}
+                else:
+                    tool_input = json.loads(raw_arguments)
+                      # Unpack dictionary for function call
 
             except json.JSONDecodeError:
                 print("Error: Tool arguments are not valid JSON.")
@@ -38,7 +42,7 @@ class Combine:
                 print(f"Tool {tool_name} not found.")
             else:
                 # Call the tool with unpacked arguments
-                output = selected_tool.invoke(input={**tool_input})
+                output = selected_tool.invoke(input=tool_input)
 
                 print(f"Final tool output: {output}")
 

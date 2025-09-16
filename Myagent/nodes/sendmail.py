@@ -13,7 +13,7 @@ class SendMail:
         """_summary_
             gets user query from state messages
         Args:
-            takes user query and user name and email address as input from state messages
+            no args taken just returns prompt instructions to user
         Returns:
             confirmation of user query has been received
         """
