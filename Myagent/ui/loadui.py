@@ -9,8 +9,13 @@ class LoadUI:
         self.user_controls={}
         self.query=str
     def load_ui(self):
+        st.set_page_config(
+            page_title="YR IT Assistant",
+            
+        )
+       
         st.title("YR IT Assistant ")
-        st.subheader("an AI-powered chatbot to assist you with your course-related queries")
+        st.subheader("an AI-powwered chatbot to assist you with your course-related queries")
         
         documents_option=self.config.get_documents_options()
         use_case_options=self.config.usecase_options()
