@@ -3,7 +3,6 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 from  ui.uiconfig import Config
-os.environ["GROQ_API_KEY"]=os.getenv("GROQ_API_KEY")
 class LoadUI:
     def __init__(self):
         self.config=Config()
@@ -32,7 +31,7 @@ class LoadUI:
         select_type_of_documents=st.sidebar.selectbox(" ",documents_option)
         add_documents=st.sidebar.file_uploader("add documents",type=select_type_of_documents)
         self.user_controls["selected_model"]=chosen
-        self.user_controls["GROQ_API_KEY"]=os.getenv("GROQ_API_KEY")
+        self.user_controls["GROQ_API_KEY"]=st.secrets["GROQ_API_KEY"]
         self.user_controls["usecases"]=use_case_options
         
         if add_documents:

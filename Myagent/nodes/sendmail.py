@@ -3,8 +3,8 @@ from states.state import State
 from langchain.tools import tool
 import os
 from dotenv import load_dotenv
+import streamlit as st
 load_dotenv()
-os.environ["app_password"]=os.getenv("app_password")
 class SendMail:
     def __init__(self):
         pass
@@ -39,7 +39,7 @@ class SendMail:
         text = f"Subject: {subject}\n\n{message}"
         server=smtplib.SMTP('smtp.gmail.com',587)
         server.starttls()
-        server.login(sender_email,os.getenv("app_password"))
+        server.login(sender_email,st.secrets["app_password"])
         server.sendmail(sender_email,destination_email,text)
         print("email has been sent")
         return {"messages":{"your query has been registered, they will reach out to you soon"}}
