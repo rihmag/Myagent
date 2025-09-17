@@ -1,2 +1,4 @@
 myenv/
 secrets
+.toml
+secrets.toml
