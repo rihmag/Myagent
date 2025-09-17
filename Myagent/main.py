@@ -28,9 +28,9 @@ else:
         if items.get("get_courses"):
             st.write(items.get("get_courses"))
         if items.get("sendmail"):
-            st.write(items.get("sendmail")['messages'])
+            st.write(items.get("sendmail")['messages'].content)
         if items.get("get_user_query"):
-            st.write(items.get("get_user_query")['messages'])
+            st.write(items.get("get_user_query")['messages'].content)
     
     
     
