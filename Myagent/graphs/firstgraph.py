@@ -7,6 +7,7 @@ from nodes.sendmail import SendMail
 from nodes.condition import Condition
 from nodes.course import Course
 from tool_invoke.tools_combine import Combine
+from nodes.websiteinfo import WebsiteInfo
 from langgraph.prebuilt import ToolNode
 from langgraph.checkpoint.memory import MemorySaver
 memory=MemorySaver()
@@ -15,7 +16,8 @@ class FirstGraph:
         sendmail=SendMail().sendmail
         get_courses=Course().get_courses
         get_user_query=SendMail().get_user_query
-        self.tools=[sendmail,get_courses,get_user_query]
+        get_website_info = WebsiteInfo().get_website_info
+        self.tools=[sendmail,get_courses,get_user_query,get_website_info]
         self.graph_builder=StateGraph(State)
         self.llm=llm.bind_tools(self.tools)
         
